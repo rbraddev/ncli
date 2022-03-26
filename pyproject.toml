@@ -32,6 +32,14 @@ pre-commit = "^2.17.0"
 line-length = 120
 target-version = ['py310']
 
+[tool.pytest.ini_options]
+markers = [
+    "command"
+]
+filterwarnings = [
+    "ignore::DeprecationWarning"
+]
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
