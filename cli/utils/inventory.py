@@ -1,6 +1,5 @@
-from httpx import Client, Response
-
 from config import Config, load_config
+from httpx import Client, Response
 
 config: Config = load_config()
 
@@ -14,7 +13,7 @@ def query_sw(query: str, parameters: dict) -> list[dict[str, str | int]]:
 
     with Client() as client:
         response: Response = client.get(
-            f"https://{{config.SW_HOST}}:17778/SolarWinds/InformationService/v3/Json/Query",
+            f"https://{config.SW_HOST}:17778/SolarWinds/InformationService/v3/Json/Query",
             headers=headers,
             auth=(config.SW_USER, config.SW_PASS),
             verify=False,
@@ -28,11 +27,13 @@ def query_sw(query: str, parameters: dict) -> list[dict[str, str | int]]:
 
 
 def search_mac(mac: str) -> list[dict[str, str | int]]:
-    query = """SELECT IPNode.IpNodeId as nodeid, IPNode.IPAddress as ip, Subnet.CIDR as cidr, IPNode.MAC as mac, IPNode.DhcpClientName as hostname
-                FROM IPAM.IPNode
-                INNER JOIN IPAM.Subnet ON IPNode.SubnetId = Subnet.SubnetId 
-                WHERE MAC LIKE @m"""
-    parameters = {"m": f"%{mac}%"}
+    query = """
+        SELECT IPNode.IpNodeId as nodeid, IPNode.IPAddress as ip, Subnet.CIDR as cidr, IPNode.MAC as mac, IPNode.DhcpClientName as hostname
+        FROM IPAM.IPNode
+        INNER JOIN IPAM.Subnet ON IPNode.SubnetId = Subnet.SubnetId
+        WHERE MAC LIKE @m
+    """  # noqa: F841
+    parameters = {"m": f"%{mac}%"}  # noqa: F841
 
     # results = query_sw(query, parameters)
 
@@ -46,3 +47,5 @@ def search_mac(mac: str) -> list[dict[str, str | int]]:
             "hostname": "PC1011.lab.local",
         }
     ]
+
+    return results
