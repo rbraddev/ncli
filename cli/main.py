@@ -3,8 +3,10 @@ from typing import Optional
 import typer
 from dotenv import load_dotenv
 
-from commands import find
-from utils.version import get_version
+from .commands import find
+from .utils.version import get_version
+
+load_dotenv()
 
 app = typer.Typer(add_completion=False)
 app.add_typer(find.app, name="find")
@@ -27,8 +29,3 @@ def version(
     )
 ):
     pass
-
-
-if __name__ == "__main__":
-    load_dotenv()
-    app()
