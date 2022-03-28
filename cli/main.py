@@ -4,6 +4,9 @@ import typer
 
 from cli.commands import find
 from cli.utils import get_version
+from cli.settings import load_settings
+
+settings = load_settings()
 
 app = typer.Typer(add_completion=False)
 app.add_typer(find.app, name="find")
@@ -12,7 +15,6 @@ app.add_typer(find.app, name="find")
 def version_callback(value: bool):
     if value:
         typer.echo(f"ncli version: {get_version()}")
-        typer.echo()
         raise typer.Exit()
 
 

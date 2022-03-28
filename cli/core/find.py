@@ -13,7 +13,7 @@ def search_mac(mac: str) -> list[dict[str, str | int]]:
     """
     parameters = {"m": f"%{mac}%"}
 
-    if settings.ENVIRONMENT in ["test", "develop"]:
+    if settings.ENVIRONMENT == "test":
         results = [
             {
                 "nodeid": 1,

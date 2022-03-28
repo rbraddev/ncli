@@ -1,10 +1,11 @@
+import os
 from functools import lru_cache
 
 from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    ENVIRONMENT: str
+    ENVIRONMENT: str = "prod"
     SW_HOST: str
     SW_USER: str
     SW_PASS: str
@@ -12,7 +13,13 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
 
+class TestSettings(Settings):
+    ENVIRONMENT: str = "test"
+
+SETTINGS = {
+    "test": TestSettings
+}
 
 @lru_cache
 def load_settings():
-    return Settings()
+    return SETTINGS.get(os.getenv("CLI_ENVIRONMENT"), Settings)()
