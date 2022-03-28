@@ -2,6 +2,8 @@ import re
 
 import typer
 
+from cli.core.find import search_mac
+
 app = typer.Typer()
 
 
@@ -15,8 +17,13 @@ def validate_mac(value: str) -> str:
 
 
 @app.command()
-def mac(mac: str = typer.Option(..., callback=validate_mac, help="Full or last 4 characters of the MAC address")):
+def mac(
+    mac: str = typer.Argument(..., callback=validate_mac, help="Full or last 4 characters of the MAC address"),
+    username: str = typer.Option(..., prompt=True),
+    password: str = typer.Option(..., prompt=True, hide_input=True),
+):
     """
     Find Desktop/Phone by MAC Address
     """
-    typer.echo(mac)
+    device = search_mac(mac)
+    typer.echo(device)

@@ -1,12 +1,9 @@
 from typing import Optional
 
 import typer
-from dotenv import load_dotenv
 
-from .commands import find
-from .utils.version import get_version
-
-load_dotenv()
+from cli.commands import find
+from cli.utils import get_version
 
 app = typer.Typer(add_completion=False)
 app.add_typer(find.app, name="find")
@@ -15,6 +12,7 @@ app.add_typer(find.app, name="find")
 def version_callback(value: bool):
     if value:
         typer.echo(f"ncli version: {get_version()}")
+        typer.echo()
         raise typer.Exit()
 
 

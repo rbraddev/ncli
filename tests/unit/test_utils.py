@@ -1,6 +1,6 @@
 from unittest import mock
 
-from cli.utils.version import get_version
+from cli.utils import get_version
 
 
 def test_get_version(monkeypatch):
