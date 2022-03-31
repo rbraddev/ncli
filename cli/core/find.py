@@ -1,15 +1,18 @@
 from ipaddress import IPv4Network
 
+from scrapli.driver.core import IOSXEDriver
+
 from cli.settings import Settings, load_settings
 from cli.utils import query_sw
 
 settings: Settings = load_settings()
 
 
-def search_mac(mac: str) -> list[dict[str, str | int]]:
+def search_mac(mac: str, username: str, password: str) -> list[dict[str, str | int]]:
     devices = get_devices_from_mac(mac)
     for device in devices:
         get_device_switch(device)
+        get_device_switch_port(device, username, password)
     return devices
 
 
@@ -55,3 +58,26 @@ def get_device_switch(device: dict):
         }
         switch = query_sw(query, parameters)[0]
         device.update({"switch": switch["hostname"].split(".")[0], "switch_ip": switch["ip"]})
+
+
+def get_device_switch_port(device_dict: dict, username: str, password: str):
+    device = {
+        "host": device_dict["switch_ip"],
+        "auth_username": username,
+        "auth_password": password,
+        "auth_strict_key": False,
+        "transport": "ssh2",
+    }
+
+    with IOSXEDriver(**device) as conn:
+        result = conn.send_command("show mac address-table")
+
+    device_dict.update(
+        {
+            "port": next(
+                res["destination_port"][0]
+                for res in result.textfsm_parse_output()
+                if "".join(device_dict["mac"].split("-"))[-4]
+            )
+        }
+    )

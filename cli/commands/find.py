@@ -1,6 +1,8 @@
 import re
 
 import typer
+from rich.console import Console
+from rich.table import Table
 
 from cli.core.find import search_mac
 
@@ -25,5 +27,20 @@ def mac(
     """
     Find Desktop/Phone by MAC Address
     """
-    devices = search_mac(mac)
-    typer.echo(devices)
+    devices = search_mac(mac, username, password)
+
+    table = Table(title="Devices")
+    table.add_column("Hostname")
+    table.add_column("IP Address")
+    table.add_column("MAC Address")
+    table.add_column("Switch")
+    table.add_column("Switch IP")
+    table.add_column("Port")
+
+    for device in devices:
+        table.add_row(
+            device["hostname"], device["ip"], device["mac"], device["switch"], device["switch_ip"], device["port"]
+        )
+
+    console = Console()
+    console.print(table)
