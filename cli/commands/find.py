@@ -36,10 +36,27 @@ def mac(
     table.add_column("Switch")
     table.add_column("Switch IP")
     table.add_column("Port")
+    table.add_column("Link")
+    table.add_column("Protocol")
+    table.add_column("Last Input")
+    table.add_column("Last Output")
+    table.add_column("Input Errors")
+    table.add_column("Output Errors")
 
     for device in devices:
         table.add_row(
-            device["hostname"], device["ip"], device["mac"], device["switch"], device["switch_ip"], device["port"]
+            device["hostname"],
+            device["ip"],
+            device["mac"],
+            device["switch"],
+            device["switch_ip"],
+            device["port"],
+            device["link"],
+            device["protocol"],
+            device["last_input"],
+            device["last_output"],
+            device["input_errors"],
+            device["output_errors"],
         )
 
     console = Console()

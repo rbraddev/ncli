@@ -71,13 +71,21 @@ def get_device_switch_port(device_dict: dict, username: str, password: str):
 
     with IOSXEDriver(**device) as conn:
         result = conn.send_command("show mac address-table")
+        port = next(
+            res["destination_port"][0]
+            for res in result.textfsm_parse_output()
+            if "".join(device_dict["mac"].split("-"))[-4]
+        )
+        result = conn.send_command(f"show interface {port}").textfsm_parse_output()[0]
 
     device_dict.update(
         {
-            "port": next(
-                res["destination_port"][0]
-                for res in result.textfsm_parse_output()
-                if "".join(device_dict["mac"].split("-"))[-4]
-            )
+            "port": port,
+            "link": result["link_status"],
+            "protocol": result["protocol_status"].split(" ")[0],
+            "last_input": result["last_input"],
+            "last_output": result["last_output"],
+            "input_errors": result["input_errors"],
+            "output_errors": result["output_errors"],
         }
     )
