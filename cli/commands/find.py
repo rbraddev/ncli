@@ -25,5 +25,5 @@ def mac(
     """
     Find Desktop/Phone by MAC Address
     """
-    device = search_mac(mac)
-    typer.echo(device)
+    devices = search_mac(mac)
+    typer.echo(devices)

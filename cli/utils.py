@@ -26,7 +26,7 @@ def query_sw(query: str, parameters: dict) -> list[dict[str, str | int]]:
     if response.status_code != 200:
         return None
 
-    return response["results"]
+    return response.json()["results"]
 
 
 def get_version() -> str:
