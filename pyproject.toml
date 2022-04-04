@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ncli"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["Ryan Bradshaw <ryan@rbradshaw.dev>"]
 readme = "README.md"
