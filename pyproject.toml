@@ -3,7 +3,6 @@ name = "ncli"
 version = "0.1.1"
 description = ""
 authors = ["Ryan Bradshaw <ryan@rbradshaw.dev>"]
-readme = "README.md"
 packages = [
     { include = "cli" },
 ]
